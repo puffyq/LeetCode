@@ -1,21 +1,30 @@
-import numpy as np
+import time
+import itertools
+import functools
+
+
+def timeit(fun):
+    @functools.wraps(fun)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        res = fun(*args, **kwargs)
+        stop_time = time.time()
+        print('运行时间:%.6fs' % (stop_time - start_time))
+        return res
+
+    return wrapper
+
+
 class Solution:
-    def permutation(self, s: str) -> List[str]:
+
+    @timeit
+    def permutation(self, s):
+        text = list(set(itertools.permutations(s)))
         out = []
-        s="vpvptjzh"
-        in_arr = [s[i] for i in range(len(s))]
-        for i in range(len(s)):
-            out.append(in_arr[i])
-        
-        for _ in range(len(s)-1):
-            out_1 = []
-            for arr in out:
-                for j in in_arr:
-                    temp_arr = [arr[i] for i in range(len(arr))]
-                    if np.sum(np.array(temp_arr)==j) >= np.sum(np.array(in_arr)==j):
-                        continue
-                    else:
-                        ar = arr + j
-                    out_1.append(ar)
-            out = out_1
-        return list(set(out))
+        for i in text:
+            out.append("".join(i))
+        return out
+
+
+aa = Solution()
+print(aa.permutation(s="vpvptjzh"))
